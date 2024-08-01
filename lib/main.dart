@@ -13,6 +13,8 @@ import 'package:e_commerce/features/presentation/viewmodel/cart/cart_viewmodel.d
 import 'package:e_commerce/features/presentation/viewmodel/home/home_viewmodel.dart';
 import 'package:e_commerce/features/presentation/viewmodel/splash/splash_viewmodel.dart';
 import 'package:e_commerce/features/presentation/viewmodel/splash/splash_viewmodel_imp.dart';
+import 'features/presentation/viewmodel/category_meals/category_meals_viewmodel.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +24,7 @@ void main() async {
   Hive.registerAdapter(MealSummaryModelAdapter());
   await Hive.openBox<MealSummaryModel>('favorites');
 
-  runApp(const MyApp());
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -30,16 +32,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ProviderScope(
-      child: MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        title: AppConstants.appName,
-        theme: lightTheme,
-        routerConfig: AppRoutes.instance.router,
-      ),
+    return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      title: AppConstants.appName,
+      theme: lightTheme,
+      routerConfig: AppRoutes.instance.router,
     );
   }
 }
+
+
 
 final splashViewModelImp = ChangeNotifierProvider<SplashViewModel>((ref) => SplashViewModelImp());
 final baseAppViewModelImp = ChangeNotifierProvider<BaseAppViewModel>((ref) => BaseAppViewModelImp());
@@ -47,3 +49,4 @@ final homeViewModelImp = ChangeNotifierProvider<HomeViewModel>((ref) => HomeView
 final cartViewModelProvider = ChangeNotifierProvider<CartViewModel>((ref) {
   return CartViewModel();
 });
+

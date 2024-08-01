@@ -1,4 +1,3 @@
-
 import '../entities/meal/meal.dart';
 import '../entities/meal/meal_summary.dart';
 

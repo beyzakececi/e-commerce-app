@@ -50,7 +50,7 @@ class AppRoutes {
             path: AppRouteName.homeScreen.path,
             name: AppRouteName.homeScreen.name,
             builder: (BuildContext context, GoRouterState state) {
-              return  HomeScreen();
+              return  HomeView();
             },
           ),
           //explore screen
@@ -88,7 +88,7 @@ class AppRoutes {
             name: AppRouteName.productDetail.name,
             builder: (context, state) {
               final meal = state.extra as Meal;
-              return MealDetailPage(mealId: meal.idMeal);
+              return MealDetailScreen(mealId: meal.idMeal);
             },
           ),
           GoRoute(

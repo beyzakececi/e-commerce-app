@@ -1,11 +1,11 @@
 import '../../../data/repositories/meal_repository_imp.dart';
 
 class FilterViewModel {
-  final MealRepositoryImpl _mealRepository;
+  //final MealRepositoryImpl _mealRepository;
 
-  FilterViewModel() : _mealRepository = MealRepositoryImpl();
+  //FilterViewModel() : _mealRepository = MealRepositoryImpl();
 
-  Future<List<String>> getAreas() {
-    return _mealRepository.fetchAreas();
-  }
+  //Future<List<String>> getAreas() {
+    //return _mealRepository.fetchAreas();
+  //}
 }

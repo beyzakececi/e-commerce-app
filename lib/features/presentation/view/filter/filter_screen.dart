@@ -20,9 +20,9 @@ class _FilterScreenState extends State<FilterScreen> {
 
   void fetchAreas() async {
     try {
-      List<String> fetchedAreas = await _viewModel.getAreas();
+      //List<String> fetchedAreas = await _viewModel.getAreas();
       setState(() {
-        areas = fetchedAreas;
+        //areas = fetchedAreas;
         for (var area in areas) {
           selectedAreas[area] = false;
         }

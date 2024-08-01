@@ -6,7 +6,7 @@ class GetCategories {
 
   GetCategories(this.repository);
 
-  Future<List<Category>> call() {
-    return repository.getCategories();
+  Future<List<Category>> call() async {
+    return await repository.getCategories();
   }
 }

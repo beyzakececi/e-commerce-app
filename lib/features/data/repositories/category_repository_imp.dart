@@ -5,14 +5,21 @@ import '../../domain/repostories/category_repository.dart';
 import '../models/category_model.dart';
 
 class CategoryRepositoryImpl implements CategoryRepository {
+  final String _baseUrl = 'https://www.themealdb.com/api/json/v1/1/categories.php';
+
   @override
   Future<List<Category>> getCategories() async {
-    final response = await http.get(Uri.parse('https://www.themealdb.com/api/json/v1/1/categories.php'));
-
-    if (response.statusCode == 200) {
-      final List<dynamic> categoryJson = json.decode(response.body)['categories'];
-      return categoryJson.map((json) => CategoryModel.fromJson(json)).toList();
-    } else {
+    try {
+      final response = await http.get(Uri.parse(_baseUrl));
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        final List<dynamic> categoriesJson = data['categories'];
+        return categoriesJson.map((json) => CategoryModel.fromJson(json)).toList();
+      } else {
+        throw Exception('Failed to load categories');
+      }
+    } catch (e) {
+      print('Error fetching categories: $e');
       throw Exception('Failed to load categories');
     }
   }

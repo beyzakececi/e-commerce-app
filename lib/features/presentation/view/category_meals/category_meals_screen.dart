@@ -1,8 +1,7 @@
-import 'package:e_commerce/features/presentation/view/category_meals/widgets/meal_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:e_commerce/features/presentation/view/category_meals/widgets/meal_tile.dart';
 import '../../../domain/entities/meal/meal_summary.dart';
 import '../../viewmodel/category_meals/category_meals_viewmodel.dart';
-import '../filter/filter_screen.dart';
 import 'meal_detail/meal_detail_screen.dart';
 
 class CategoryMealsScreen extends StatelessWidget {
@@ -16,24 +15,9 @@ class CategoryMealsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        titleTextStyle: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
         title: Text(category),
         backgroundColor: Colors.white,
         elevation: 0,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.filter_list, color: Colors.black), // Filter icon
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => FilterScreen(), // Navigate to filter screen
-                ),
-              );
-            },
-          ),
-        ],
       ),
       body: FutureBuilder<List<MealSummary>>(
         future: viewModel.getMeals(),
@@ -59,7 +43,7 @@ class CategoryMealsScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => MealDetailPage(mealId: snapshot.data![index].idMeal),
+                        builder: (context) => MealDetailScreen(mealId: snapshot.data![index].idMeal),
                       ),
                     );
                   },

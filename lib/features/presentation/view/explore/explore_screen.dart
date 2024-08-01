@@ -1,22 +1,18 @@
 import 'package:e_commerce/features/presentation/view/explore/widgets/category_tile.dart';
-import 'package:e_commerce/features/presentation/widgets/search/search_bar.dart';
 import 'package:flutter/material.dart';
-
+import '../../../data/repositories/category_repository_imp.dart';
 import '../../../domain/entities/category/category.dart';
-import '../../viewmodel/explore/explore_viewmodel.dart';
+import '../../../domain/repostories/category_repository.dart';
+import '../../widgets/search/search_bar.dart';
 import '../category_meals/category_meals_screen.dart';
 
 class ExplorePage extends StatelessWidget {
-  final ExploreViewModel viewModel;
-
-  ExplorePage({Key? key})
-      : viewModel = ExploreViewModel(),
-        super(key: key);
+  final CategoryRepository categoryRepository = CategoryRepositoryImpl();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  PreferredSize(
+      appBar: PreferredSize(
         preferredSize: Size.fromHeight(120),
         child: AppBar(
           backgroundColor: Colors.white,
@@ -41,7 +37,7 @@ class ExplorePage extends StatelessWidget {
         ),
       ),
       body: FutureBuilder<List<Category>>(
-        future: viewModel.getCategories(),
+        future: categoryRepository.getCategories(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
