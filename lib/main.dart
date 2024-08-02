@@ -1,19 +1,15 @@
-import 'package:e_commerce/features/data/models/meal_summary_model.dart';
+import 'package:e_commerce/product/constants/app_constants.dart';
+import 'package:e_commerce/product/router/go_router.dart';
+import 'package:e_commerce/product/theme/light_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:e_commerce/core/constants/app_constants.dart';
-import 'package:e_commerce/core/router/go_router.dart';
-import 'package:e_commerce/core/theme/light_theme.dart';
-import 'package:e_commerce/features/presentation/viewmodel/home/home_viewmodel_imp.dart';
-import 'package:e_commerce/features/presentation/viewmodel/base_app/base_app_viewmodel.dart';
-import 'package:e_commerce/features/presentation/viewmodel/base_app/base_app_viewmodel_imp.dart';
-import 'package:e_commerce/features/presentation/viewmodel/cart/cart_viewmodel.dart';
-import 'package:e_commerce/features/presentation/viewmodel/home/home_viewmodel.dart';
-import 'package:e_commerce/features/presentation/viewmodel/splash/splash_viewmodel.dart';
-import 'package:e_commerce/features/presentation/viewmodel/splash/splash_viewmodel_imp.dart';
-import 'features/presentation/viewmodel/category_meals/category_meals_viewmodel.dart';
+import 'package:e_commerce/feature/cart/presentation/viewmodel/cart_viewmodel.dart';
+import 'package:e_commerce/feature/home/presentation/viewmodel/home_viewmodel.dart';
+import 'feature/explore/presentation/viewmodel/category_meals_viewmodel.dart';
+import 'feature/product_detail/data/model/meal_summary_model.dart';
+import 'feature/splash/viewmodel/splash_viewmodel.dart';
 
 
 void main() async {
@@ -42,10 +38,6 @@ class MyApp extends StatelessWidget {
 }
 
 
-
-final splashViewModelImp = ChangeNotifierProvider<SplashViewModel>((ref) => SplashViewModelImp());
-final baseAppViewModelImp = ChangeNotifierProvider<BaseAppViewModel>((ref) => BaseAppViewModelImp());
-final homeViewModelImp = ChangeNotifierProvider<HomeViewModel>((ref) => HomeViewModelImp());
 final cartViewModelProvider = ChangeNotifierProvider<CartViewModel>((ref) {
   return CartViewModel();
 });
