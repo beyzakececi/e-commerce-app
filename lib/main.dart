@@ -1,44 +1,49 @@
-import 'package:e_commerce/product/constants/app_constants.dart';
-import 'package:e_commerce/product/router/go_router.dart';
-import 'package:e_commerce/product/theme/light_theme.dart';
+import 'package:e_commerce/product/di/injector.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:e_commerce/feature/cart/presentation/viewmodel/cart_viewmodel.dart';
-import 'package:e_commerce/feature/home/presentation/viewmodel/home_viewmodel.dart';
-import 'feature/explore/presentation/viewmodel/category_meals_viewmodel.dart';
-import 'feature/product_detail/data/model/meal_summary_model.dart';
-import 'feature/splash/viewmodel/splash_viewmodel.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'feature/home/presentation/bloc/meals_bloc.dart';
+import 'product/constants/app_constants.dart';
+import 'product/router/go_router.dart';
+import 'product/theme/light_theme.dart';
 
 void main() async {
+  // Ensure that the Flutter binding has been initialized
   WidgetsFlutterBinding.ensureInitialized();
 
-  final appDocumentDir = await getApplicationDocumentsDirectory();
-  await Hive.initFlutter(appDocumentDir.path);
-  Hive.registerAdapter(MealSummaryModelAdapter());
-  await Hive.openBox<MealSummaryModel>('favorites');
+  // Initialize dependency injection
+  init();
 
-  runApp(ProviderScope(child: MyApp()));
+  // Run app
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        //BlocProvider(
+          //create: (context) => sl<CategoriesBloc>()..add(FetchCategories()),
+        //),
+        BlocProvider(
+          create: (context) => sl<MealsBloc>(),
+        ),
+      ],
+      child: const MainApp(),
+    ),
+  );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: AppConstants.appName,
-      theme: lightTheme,
+      //theme: sl<AppTheme>().lightTheme,
+      //darkTheme: sl<AppTheme>().darkTheme,
+      themeMode: ThemeMode.light,
       routerConfig: AppRoutes.instance.router,
     );
   }
 }
 
 
-final cartViewModelProvider = ChangeNotifierProvider<CartViewModel>((ref) {
-  return CartViewModel();
-});
 

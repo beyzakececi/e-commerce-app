@@ -1,59 +1,61 @@
 import 'package:flutter/material.dart';
-
-import '../../../../domain/entities/meal_summary.dart';
+import 'package:e_commerce/feature/home/domain/entities/meal_entity.dart';
 
 class MealTile extends StatelessWidget {
-  final MealSummary meal;
-  final double price;
+  final MealEntity meal;
+  final int index;
 
-  MealTile({required this.meal, this.price = 1.99});
+  MealTile({required this.meal, required this.index});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    double imageSize = MediaQuery.of(context).size.width * 0.3;
+    double fontSize = MediaQuery.of(context).size.width * 0.04;
+
+    return Container(
+      padding: EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: Colors.grey, width: 1),
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Expanded(
+          Flexible(
+            flex: 3,
             child: Image.network(
-              meal.strMealThumb,
+              meal.thumbnail!,
+              height: imageSize,
               fit: BoxFit.cover,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          SizedBox(height: 10),
+          Flexible(
+            flex: 1,
+            child: Text(
+              meal.name!,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
+            ),
+          ),
+          SizedBox(height: 5),
+          Expanded(
+            flex: 1,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  meal.strMeal,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  '\$10.00',
+                  style: TextStyle(fontSize: 18.0
+                    , fontWeight: FontWeight.bold,),
                 ),
-                SizedBox(height: 4),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '\$$price',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                      ),
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        Icons.add_circle,
-                        color: Colors.green,
-                      ),
-                      onPressed: () {
-                        // Handle add to cart functionality here
-                      },
-                    ),
-                  ],
+                IconButton(
+                  icon: Icon(Icons.add_box_rounded, color: Colors.green, size: 40.0),
+                  onPressed: () {
+                    // Add to cart functionality
+                  },
                 ),
               ],
             ),

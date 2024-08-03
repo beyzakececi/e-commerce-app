@@ -3,15 +3,17 @@ import 'package:e_commerce/feature/splash/view/splash_screen.dart';
 import 'package:e_commerce/feature/explore/presentation/view/explore_screen.dart';
 import 'package:e_commerce/product/router/route_names.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../feature/account/view/account_screen.dart';
 import '../../feature/app/presentation/view/app.dart';
-import '../../feature/explore/domain/entities/meal.dart';
 import '../../feature/cart/presentation/view/cart_screen.dart';
+import '../../feature/explore/domain/entities/category.dart';
+import '../../feature/explore/presentation/view/category_meals/category_meals_screen.dart';
 import '../../feature/explore/presentation/view/category_meals/meal_detail/meal_detail_screen.dart';
-import '../../feature/home/presentation/view/home_screen.dart';
 import '../../feature/favorites/presentation/view/favorites_screen.dart';
 import '../../feature/cart/presentation/view/order_accepted_screen.dart';
+import '../../feature/home/presentation/pages/home_screen.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey =
     GlobalKey(debugLabel: 'root');
@@ -59,6 +61,16 @@ class AppRoutes {
                 builder: (context, state) {
               return  ExplorePage();
                 }),
+          GoRoute(
+            path: '/category-meals',
+            builder: (context, state) {
+              final category = state.extra as CategoryEntity?;
+              if (category == null) {
+                return Scaffold(body: Center(child: Text('Invalid category data')));
+              }
+              return CategoryMealsScreen(category: category);
+            },
+          ),
           //cart screen
           GoRoute(
             path: AppRouteName.myCart.path,
@@ -82,14 +94,7 @@ class AppRoutes {
               return FavoritesView();
             },
           ),
-          GoRoute(
-            path: AppRouteName.productDetail.path,
-            name: AppRouteName.productDetail.name,
-            builder: (context, state) {
-              final meal = state.extra as Meal;
-              return MealDetailPage(mealId: meal.idMeal);
-            },
-          ),
+
           GoRoute(
             path: AppRouteName.account.path,
             name: AppRouteName.account.name,

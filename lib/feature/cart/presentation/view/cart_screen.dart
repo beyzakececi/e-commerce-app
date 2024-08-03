@@ -6,6 +6,7 @@ import '../../../../product/enums/app_png.dart';
 import '../../../../product/router/route_names.dart';
 import '../../../app/presentation/view/widgets/custom_image.dart';
 import '../../data/model/cart_item_model.dart';
+import '../viewmodel/cart_viewmodel.dart';
 
 class CartPage extends ConsumerWidget {
   @override

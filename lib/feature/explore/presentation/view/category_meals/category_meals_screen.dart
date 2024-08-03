@@ -1,58 +1,63 @@
-import 'package:e_commerce/feature/explore/presentation/view/category_meals/widgets/meal_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../../product/di/injector.dart';
+import '../../../domain/entities/category.dart';
+import '../../../../home/presentation/bloc/meals_bloc.dart';
+import '../filter/filter_screen.dart';
+import 'widgets/meal_tile.dart';
+import '../../../../home/domain/entities/meal_entity.dart';
 
-import '../../../domain/entities/meal_summary.dart';
-import '../../viewmodel/category_meals_viewmodel.dart';
-import 'meal_detail/meal_detail_screen.dart';
 class CategoryMealsScreen extends StatelessWidget {
-  final String category;
+  final CategoryEntity category;
 
   CategoryMealsScreen({required this.category});
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = CategoryMealsViewModel(category);
-
     return Scaffold(
       appBar: AppBar(
-        title: Text(category),
-        backgroundColor: Colors.white,
-        elevation: 0,
+        centerTitle: true,
+        title: Text(category.name ?? 'Category Meals'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.tune),
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                builder: (context) => FilterScreen(),
+              );
+            },
+          ),
+        ],
       ),
-      body: FutureBuilder<List<MealSummary>>(
-        future: viewModel.getMeals(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error loading meals'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No meals found'));
-          } else {
-            return GridView.builder(
-              padding: EdgeInsets.all(10),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 10,
-              ),
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MealDetailPage(mealId: snapshot.data![index].idMeal),
-                      ),
-                    );
-                  },
-                  child: MealTile(meal: snapshot.data![index]),
-                );
-              },
-            );
-          }
-        },
+      body: BlocProvider(
+        create: (context) => sl<MealsBloc>()..add(FetchMealsByCategory(category.name!)),
+        child: BlocBuilder<MealsBloc, MealsState>(
+          builder: (context, state) {
+            if (state is MealsLoading) {
+              return Center(child: CircularProgressIndicator());
+            } else if (state is MealsLoaded) {
+              return GridView.builder(
+                padding: const EdgeInsets.all(16.0),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: MediaQuery.of(context).size.width < 600 ? 2 : 3,
+                  childAspectRatio: MediaQuery.of(context).size.width < 600 ? 0.75 : 0.85,
+                  crossAxisSpacing: 16.0,
+                  mainAxisSpacing: 16.0,
+                ),
+                itemCount: state.meals.length,
+                itemBuilder: (context, index) {
+                  final meal = state.meals[index];
+                  return MealTile(meal: meal, index: index);
+                },
+              );
+            } else if (state is MealsError) {
+              return Center(child: Text(state.message));
+            }
+            return Container();
+          },
+        ),
       ),
     );
   }

@@ -8,25 +8,22 @@ import '../../app/presentation/view/widgets/custom_image.dart';
 import '../viewmodel/splash_viewmodel.dart';
 
 
-class SplashScreen extends ConsumerStatefulWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  ConsumerState createState() => _SplashViewState();
+  State createState() => _SplashViewState();
 }
 
-class _SplashViewState extends ConsumerState<SplashScreen> {
-  late SplashViewModel splashViewModel;
+class _SplashViewState extends State<SplashScreen> {
 
   @override
   void initState() {
     super.initState();
-    splashViewModel = ref.read(splashViewModelProvider.notifier);
     init();
   }
 
   init() async {
-    await splashViewModel.getInitialScreen();
     Future.delayed(const Duration(seconds: 2)).then((_) {
       context.goNamed(AppRouteName.onbording.name);
     });

@@ -1,13 +1,18 @@
-class Category {
-  final String idCategory;
-  final String strCategory;
-  final String strCategoryThumb;
-  final String strCategoryDescription;
+import 'package:equatable/equatable.dart';
 
-  Category({
-    required this.idCategory,
-    required this.strCategory,
-    required this.strCategoryThumb,
-    required this.strCategoryDescription,
+class CategoryEntity extends Equatable {
+  final String? id;
+  final String? name;
+  final String? thumbnail;
+  final String? description;
+
+  const CategoryEntity({
+    this.id,
+    this.name,
+    this.thumbnail,
+    this.description,
   });
+
+  @override
+  List<Object?> get props => [id, name, thumbnail, description];
 }

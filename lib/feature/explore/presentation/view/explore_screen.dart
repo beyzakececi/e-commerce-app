@@ -1,18 +1,11 @@
-import 'package:e_commerce/feature/explore/data/model/category_model.dart';
-import 'package:e_commerce/feature/explore/presentation/view/widgets/category_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:e_commerce/feature/explore/presentation/bloc/categories_bloc.dart';
+import '../../../../product/di/injector.dart';
 import '../../../app/presentation/view/widgets/search_bar.dart';
-import '../../domain/entities/category.dart';
-import '../viewmodel/explore_viewmodel.dart';
-import 'category_meals/category_meals_screen.dart';
+import 'widgets/category_tile.dart';
 
 class ExplorePage extends StatelessWidget {
-  final ExploreViewModel viewModel;
-
-  ExplorePage({Key? key})
-      : viewModel = ExploreViewModel(),
-        super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,42 +33,33 @@ class ExplorePage extends StatelessWidget {
           ),
         ),
       ),
-      body: FutureBuilder<List<CategoryModel>>(
-        future: viewModel.getCategories(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error loading categories'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No categories found'));
-          } else {
-            return GridView.builder(
-              padding: EdgeInsets.all(10),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 10,
-              ),
-              itemCount: snapshot.data!.length,
-              itemBuilder:
-                  (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CategoryMealsScreen(category: snapshot.data![index].strCategory),
-                      ),
-                    );
-                  },
-                  child: CategoryTile(category: snapshot.data![index], index: index
-                  ),
-                );
-              },
-            );
-          }
-        },
+      body: BlocProvider(
+        create: (context) => sl<CategoriesBloc>()..add(FetchCategories()),
+        child: BlocBuilder<CategoriesBloc, CategoriesState>(
+          builder: (context, state) {
+            if (state is CategoriesLoading) {
+              return Center(child: CircularProgressIndicator());
+            } else if (state is CategoriesLoaded) {
+              return GridView.builder(
+                padding: const EdgeInsets.all(16.0),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: MediaQuery.of(context).size.width < 600 ? 2 : 3,
+                  childAspectRatio: MediaQuery.of(context).size.width < 600 ? 3 / 2 : 2 / 1,
+                  crossAxisSpacing: 16.0,
+                  mainAxisSpacing: 16.0,
+                ),
+                itemCount: state.categories.length,
+                itemBuilder: (context, index) {
+                  final category = state.categories[index];
+                  return CategoryTile(category: category, index: index);
+                },
+              );
+            } else if (state is CategoriesError) {
+              return Center(child: Text(state.message));
+            }
+            return Container();
+          },
+        ),
       ),
     );
   }

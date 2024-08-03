@@ -1,23 +1,25 @@
-import 'dart:convert';
-import 'package:e_commerce/feature/explore/data/model/category_model.dart';
-import 'package:http/http.dart' as http;
-import '../../domain/entities/category.dart';
+import 'package:dartz/dartz.dart';
+
+import '../../../../product/errors/failures.dart';
 import '../../domain/repositories/category_repository.dart';
+import '../datasources/category_datasource.dart';
+import '../model/category_model.dart';
 
 class CategoryRepositoryImpl implements CategoryRepository {
-  final String _baseUrl = 'https://www.themealdb.com/api/json/v1/1/categories.php';
+  final CategoryDatasource categoryDatasource;
+
+  CategoryRepositoryImpl(this.categoryDatasource);
 
   @override
-  Future<List<CategoryModel>> getCategories() async {
-    final response = await http.get(Uri.parse(_baseUrl));
-    if (response.statusCode == 200) {
-      final body = json.decode(response.body);
-      final categories = (body['categories'] as List)
-          .map((json) => CategoryModel.fromJson(json))
+  Future<Either<Failure, List<CategoryModel>>> getCategories() async {
+    try {
+      final response = await categoryDatasource.fetchCategories();
+      final categories = (response.data['categories'] as List)
+          .map((e) => CategoryModel.fromJson(e))
           .toList();
-      return categories;
-    } else {
-      throw Exception('Failed to load categories');
+      return Right(categories);
+    } catch (e) {
+      return Left(ServerFailure());
     }
   }
 }

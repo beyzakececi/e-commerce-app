@@ -126,14 +126,14 @@ class AccountView extends StatelessWidget {
                   // Log out app
                   SystemNavigator.pop(); // Close the app
                 },
-                icon: Icon(Icons.logout, color: Colors.green),
+                icon: Icon(Icons.logout, color: Colors.green,),
                 label: Text(
                   'Log Out',
                   style: TextStyle(color: Colors.green, fontSize: 16),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.grey.shade200,
-                  padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+                  padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 150.0),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.0),
                   ),

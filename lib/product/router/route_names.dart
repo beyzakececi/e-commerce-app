@@ -4,6 +4,8 @@ class RouteNames {
   static const homeScreen = 'homeScreen';
   static const productDetail = 'productDetail';
   static const explore = 'explore';
+  ///category-meals
+  static const categoryMeals = 'category-meals';
   static const search = 'search';
   static const myCart = 'myCart';
   static const orderAccepted = 'orderAccepted';
@@ -18,6 +20,7 @@ enum AppRouteName {
   homeScreen('/homeScreen','HomeScreen'),
   productDetail('/productDetail','ProductDetail'),
   explore('/explore','Explore'),
+  categoryMeals('/category-meals','CategoryMeals'),
   search('/search','Search'),
   myCart('/myCart','MyCart'),
   orderAccepted('/orderAccepted','OrderAccepted'),
