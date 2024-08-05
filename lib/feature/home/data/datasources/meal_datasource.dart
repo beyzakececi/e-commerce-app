@@ -51,4 +51,6 @@ class MealDatasource {
     final url = '/filter.php?a=$area';
     return await networkService.getRequest(url);
   }
+
+
 }

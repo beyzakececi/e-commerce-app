@@ -1,33 +1,17 @@
 import 'package:e_commerce/product/di/injector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get_it/get_it.dart';
+import 'feature/cart/presentation/bloc/cart_bloc.dart';
+import 'feature/explore/presentation/bloc/categories_bloc.dart';
+import 'feature/favorites/presentation/bloc/favorite_bloc.dart';
 import 'feature/home/presentation/bloc/meals_bloc.dart';
-import 'product/constants/app_constants.dart';
 import 'product/router/go_router.dart';
-import 'product/theme/light_theme.dart';
 
 void main() async {
-  // Ensure that the Flutter binding has been initialized
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Initialize dependency injection
-  init();
-
-  // Run app
-  runApp(
-    MultiBlocProvider(
-      providers: [
-        //BlocProvider(
-          //create: (context) => sl<CategoriesBloc>()..add(FetchCategories()),
-        //),
-        BlocProvider(
-          create: (context) => sl<MealsBloc>(),
-        ),
-      ],
-      child: const MainApp(),
-    ),
-  );
+  await init();
+  runApp(const MainApp());
 }
 
 class MainApp extends StatelessWidget {
@@ -35,15 +19,24 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      //theme: sl<AppTheme>().lightTheme,
-      //darkTheme: sl<AppTheme>().darkTheme,
-      themeMode: ThemeMode.light,
-      routerConfig: AppRoutes.instance.router,
+    return MultiBlocProvider(
+      providers: [
+
+        BlocProvider(
+          create: (context) => sl<CategoriesBloc>()..add(FetchCategories()),
+        ),
+        BlocProvider(
+          create: (context) => sl<MealsBloc>(),
+        ),
+        BlocProvider(
+          create: (context) => sl<CartBloc>()..add(LoadCart()),
+        ),
+      ],
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        themeMode: ThemeMode.light,
+        routerConfig: AppRoutes.instance.router,
+      ),
     );
   }
 }
-
-
-

@@ -1,4 +1,5 @@
 import 'package:e_commerce/feature/onboarding/view/onboarding_screen.dart';
+import 'package:e_commerce/feature/product_detail/presentation/pages/meal_detail_page.dart';
 import 'package:e_commerce/feature/splash/view/splash_screen.dart';
 import 'package:e_commerce/feature/explore/presentation/view/explore_screen.dart';
 import 'package:e_commerce/product/router/route_names.dart';
@@ -10,9 +11,9 @@ import '../../feature/app/presentation/view/app.dart';
 import '../../feature/cart/presentation/view/cart_screen.dart';
 import '../../feature/explore/domain/entities/category.dart';
 import '../../feature/explore/presentation/view/category_meals/category_meals_screen.dart';
-import '../../feature/explore/presentation/view/category_meals/meal_detail/meal_detail_screen.dart';
 import '../../feature/favorites/presentation/view/favorites_screen.dart';
 import '../../feature/cart/presentation/view/order_accepted_screen.dart';
+import '../../feature/home/domain/entities/meal_entity.dart';
 import '../../feature/home/presentation/pages/home_screen.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey =
@@ -71,6 +72,17 @@ class AppRoutes {
               return CategoryMealsScreen(category: category);
             },
           ),
+          GoRoute(
+            path: AppRouteName.mealDetail.path,
+            name: AppRouteName.mealDetail.name,
+            builder: (context, state) {
+              final meal = state.extra as MealEntity?;
+              if (meal == null) {
+                return Scaffold(body: Center(child: Text('Invalid meal data')));
+              }
+              return MealDetailScreen(mealId: meal.id);
+            },
+          ),
           //cart screen
           GoRoute(
             path: AppRouteName.myCart.path,
@@ -91,7 +103,7 @@ class AppRoutes {
             path: AppRouteName.favorites.path,
             name: AppRouteName.favorites.name,
             builder: (context, state) {
-              return FavoritesView();
+              return FavoritePage();
             },
           ),
 

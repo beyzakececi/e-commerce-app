@@ -13,18 +13,29 @@ import '../../domain/use_cases/random_meal_usecase.dart';
 import '../../domain/use_cases/search_meals_by_name_usecase.dart';
 
 part 'meals_event.dart';
+
 part 'meals_state.dart';
 
 class MealsBloc extends Bloc<MealsEvent, MealsState> {
-  MealsBloc({required GetMealListUseCase getMealsUsecase})
-      : super(MealsInitial()) {
+  final GetMealListUseCase getMealsUsecase;
+  final GetMealListByCategoryUseCase getMealListByCategoryUseCase;
+  final GetMealListByAreaUseCase getMealListByAreaUseCase;
+  final LookupRandomMealUseCase lookupRandomMealUseCase;
+
+
+  MealsBloc({
+    required this.getMealsUsecase,
+    required this.getMealListByCategoryUseCase,
+    required this.getMealListByAreaUseCase,
+    required this.lookupRandomMealUseCase,
+  }) : super(MealsInitial()) {
     on<GetMealsByQuery>((event, emit) async {
       emit(MealsLoading());
-      final result = await sl<GetMealListUseCase>().call(event.query);
+      final result = await getMealsUsecase.call(event.query);
 
       result.fold(
-            (failure) => emit(MealsError(failure.toString())),
-            (meals) => emit(MealsLoaded(meals)),
+        (failure) => emit(MealsError(failure.toString())),
+        (meals) => emit(MealsLoaded(meals)),
       );
     });
 
@@ -33,30 +44,33 @@ class MealsBloc extends Bloc<MealsEvent, MealsState> {
       final result = await sl<GetMealByIdUseCase>().call(event.id);
 
       result.fold(
-            (failure) => emit(MealsError(failure.toString())),
-            (meal) => emit(MealLoaded(meal)),
+        (failure) => emit(MealsError(failure.toString())),
+        (meal) => emit(MealLoaded(meal)),
       );
     });
 
     on<ListMealsByFirstLetter>((event, emit) async {
       emit(MealsLoading());
       final result =
-      await sl<ListMealsByFirstLetterUseCase>().call(event.letter);
+          await sl<ListMealsByFirstLetterUseCase>().call(event.letter);
 
       result.fold(
-            (failure) => emit(MealsError(failure.toString())),
-            (meals) => emit(MealsLoaded(meals)),
+        (failure) => emit(MealsError(failure.toString())),
+        (meals) => emit(MealsLoaded(meals)),
       );
     });
 
     on<LookupRandomMeal>((event, emit) async {
       emit(MealsLoading());
-      final result = await sl<LookupRandomMealUseCase>().call(NoParams());
-
-      result.fold(
-            (failure) => emit(MealsError(failure.toString())),
-            (meal) => emit(RandomMealLoaded(meal)),
-      );
+      List<MealEntity> meals = [];
+      for (int i = 0; i < 5; i++) {
+        final result = await sl<LookupRandomMealUseCase>().call(NoParams());
+        result.fold(
+              (failure) => emit(MealsError(failure.toString())),
+              (meal) => meals.add(meal),
+        );
+      }
+      emit(MealsLoaded(meals));
     });
 
     on<SearchMealsByName>((event, emit) async {
@@ -64,31 +78,37 @@ class MealsBloc extends Bloc<MealsEvent, MealsState> {
       final result = await sl<SearchMealsByNameUseCase>().call(event.name);
 
       result.fold(
-            (failure) => emit(MealsError(failure.toString())),
-            (meals) => emit(MealsLoaded(meals)),
+        (failure) => emit(MealsError(failure.toString())),
+        (meals) => emit(MealsLoaded(meals)),
       );
     });
 
     on<FetchMealsByCategory>((event, emit) async {
       emit(MealsLoading());
-      final result = await sl<GetMealListByCategoryUseCase>().call(event.category);
+      final result =
+          await sl<GetMealListByCategoryUseCase>().call(event.category);
 
       result.fold(
-            (failure) => emit(MealsError(failure.toString())),
-            (meals) => emit(MealsLoaded(meals)),
+        (failure) => emit(MealsError(failure.toString())),
+        (meals) => emit(MealsLoaded(meals)),
       );
     });
 
     on<FetchMealsByArea>((event, emit) async {
       emit(MealsLoading());
-      final result = await sl<GetMealListByAreaUseCase>().call(event.area);
+      if (event.area == "") {
+        emit(MealsLoaded([]));
+        return;
+      }
+
+      final result = await getMealListByAreaUseCase(event.area);
 
       result.fold(
-            (failure) => emit(MealsError(failure.toString())),
-            (meals) => emit(MealsLoaded(meals)),
+        (failure) => emit(MealsError(failure.toString())),
+        (meals) => emit(MealsLoaded(meals)),
       );
     });
+
+
   }
-
-
 }

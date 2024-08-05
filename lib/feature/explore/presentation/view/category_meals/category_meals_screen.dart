@@ -1,5 +1,7 @@
+import 'package:e_commerce/product/router/route_names.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../../product/di/injector.dart';
 import '../../../domain/entities/category.dart';
 import '../../../../home/presentation/bloc/meals_bloc.dart';
@@ -49,7 +51,15 @@ class CategoryMealsScreen extends StatelessWidget {
                 itemCount: state.meals.length,
                 itemBuilder: (context, index) {
                   final meal = state.meals[index];
-                  return MealTile(meal: meal, index: index);
+                  return GestureDetector(
+                    onTap: () {
+                      context.push(
+                        AppRouteName.mealDetail.path,
+                        extra: meal,
+                      );
+                    },
+                    child: MealTile(meal: meal, index: index),
+                  );
                 },
               );
             } else if (state is MealsError) {

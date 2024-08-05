@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:e_commerce/feature/home/domain/entities/meal_entity.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../../cart/data/model/cart_item_model.dart';
+import '../../../../../cart/presentation/bloc/cart_bloc.dart';
 
 class MealTile extends StatelessWidget {
   final MealEntity meal;
@@ -54,7 +58,14 @@ class MealTile extends StatelessWidget {
                 IconButton(
                   icon: Icon(Icons.add_box_rounded, color: Colors.green, size: 40.0),
                   onPressed: () {
-                    // Add to cart functionality
+                    final cartItem = CartItem(
+                      id: meal.id,
+                      name: meal.name ?? '',
+                      imageUrl: meal.thumbnail ?? '',
+                      price: 10, // You may want to get the actual price from meal if available
+                      quantity: 1,
+                    );
+                    context.read<CartBloc>().add(AddItem(cartItem));
                   },
                 ),
               ],

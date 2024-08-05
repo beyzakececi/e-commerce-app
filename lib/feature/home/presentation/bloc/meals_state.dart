@@ -20,6 +20,8 @@ class MealsLoaded extends MealsState {
   List<Object> get props => [meals];
 }
 
+
+
 class MealsError extends MealsState {
   final String message;
 
@@ -46,3 +48,4 @@ class RandomMealLoaded extends MealsState {
   @override
   List<Object> get props => [meal];
 }
+

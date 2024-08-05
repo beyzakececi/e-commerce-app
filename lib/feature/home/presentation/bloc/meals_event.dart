@@ -62,3 +62,4 @@ class FetchMealsByArea extends MealsEvent {
   @override
   List<Object> get props => [area];
 }
+

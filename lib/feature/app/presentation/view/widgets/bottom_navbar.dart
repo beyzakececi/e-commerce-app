@@ -27,7 +27,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
       surfaceTintColor: AppColors.whiteColor,
       selectedIndex: currentIndex,
       backgroundColor: AppColors.whiteColor,
-      indicatorColor: AppColors.electricViolet.withOpacity(.2),
+      indicatorColor: AppColors.splashScreenBackground,
       onDestinationSelected: (index) {
         switch (index) {
           case 0:
@@ -35,6 +35,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
             break;
           case 1:
             context.goNamed(AppRouteName.explore.name);
+
             break;
           case 2:
             context.goNamed(AppRouteName.myCart.name);

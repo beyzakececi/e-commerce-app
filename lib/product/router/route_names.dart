@@ -2,7 +2,7 @@ class RouteNames {
   static const splash = 'splash';
   static const onboard = 'onboard';
   static const homeScreen = 'homeScreen';
-  static const productDetail = 'productDetail';
+  static const mealDetail = 'mealDetail';
   static const explore = 'explore';
   ///category-meals
   static const categoryMeals = 'category-meals';
@@ -18,7 +18,7 @@ enum AppRouteName {
   splash('/','Splash'),
   onbording('/onboard','Onboard'),
   homeScreen('/homeScreen','HomeScreen'),
-  productDetail('/productDetail','ProductDetail'),
+  mealDetail('/mealDetail','MealDetail'),
   explore('/explore','Explore'),
   categoryMeals('/category-meals','CategoryMeals'),
   search('/search','Search'),

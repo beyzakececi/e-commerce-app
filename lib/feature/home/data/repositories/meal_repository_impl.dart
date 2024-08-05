@@ -1,5 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
+
 import '../../../../product/errors/failures.dart';
 import '../../../home/data/model/meal_model.dart';
 import '../../domain/entities/meal_entity.dart';
@@ -41,8 +42,8 @@ class MealRepositoryImpl implements MealRepository {
 
   @override
   Future<Either<Failure, List<MealModel>>> listMealsByFirstLetter(
-      String letter,
-      ) async {
+    String letter,
+  ) async {
     try {
       final response = await mealDatasource.fetchMealsByFirstLetter(letter);
 
@@ -77,8 +78,8 @@ class MealRepositoryImpl implements MealRepository {
 
   @override
   Future<Either<Failure, List<MealModel>>> searchMealsByName(
-      String name,
-      ) async {
+    String name,
+  ) async {
     try {
       final response = await mealDatasource.fetchMealsByName(name);
 
@@ -98,7 +99,8 @@ class MealRepositoryImpl implements MealRepository {
   }
 
   @override
-  Future<Either<Failure, List<MealEntity>>> getMealsByCategory(String category) async {
+  Future<Either<Failure, List<MealEntity>>> getMealsByCategory(
+      String category) async {
     try {
       final response = await mealDatasource.fetchMealsByCategory(category);
       final meals = (response.data['meals'] as List)
@@ -111,7 +113,6 @@ class MealRepositoryImpl implements MealRepository {
   }
 
   @override
-
   Future<Either<Failure, List<MealEntity>>> getMealsByArea(String area) async {
     try {
       final response = await mealDatasource.fetchMealsByArea(area);
@@ -123,5 +124,4 @@ class MealRepositoryImpl implements MealRepository {
       return Left(ServerFailure());
     }
   }
-
 }

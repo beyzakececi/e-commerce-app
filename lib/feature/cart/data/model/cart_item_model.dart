@@ -1,10 +1,9 @@
 import 'package:hive/hive.dart';
-import 'package:json_annotation/json_annotation.dart';
+import '../../../product_detail/domain/entities/meal_detail_entity.dart';
 
 part 'cart_item_model.g.dart';
 
 @HiveType(typeId: 1)
-@JsonSerializable()
 class CartItem {
   @HiveField(0)
   final String id;
@@ -13,18 +12,41 @@ class CartItem {
   @HiveField(2)
   final String imageUrl;
   @HiveField(3)
-  final double price;
+  final num quantity;
   @HiveField(4)
-  String quantity;
+  final num price;
 
   CartItem({
     required this.id,
     required this.name,
     required this.imageUrl,
-    this.price = 10.0, // Default price set to $10.0
-    this.quantity = "1", // Default quantity set to 1
+    required this.quantity,
+    required this.price,
   });
 
-  factory CartItem.fromJson(Map<String, dynamic> json) => _$CartItemFromJson(json);
-  Map<String, dynamic> toJson() => _$CartItemToJson(this);
+  factory CartItem.fromMeal(MealDetailEntity meal) {
+    return CartItem(
+      id: meal.id ?? '',
+      name: meal.name ?? '',
+      imageUrl: meal.thumbnail ?? '',
+      quantity: meal.quantity,
+      price: 10 // Meal price should be defined somewhere, using a placeholder here
+    );
+  }
+
+  CartItem copyWith({
+    String? id,
+    String? name,
+    String? imageUrl,
+    num? quantity,
+    num? price,
+  }) {
+    return CartItem(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      imageUrl: imageUrl ?? this.imageUrl,
+      quantity: quantity ?? this.quantity,
+      price: price ?? this.price,
+    );
+  }
 }
